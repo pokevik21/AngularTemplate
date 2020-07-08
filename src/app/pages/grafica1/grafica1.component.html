@@ -1,1 +1,16 @@
-<p>grafica1 works!</p>
+<div class="row">
+  <div *ngFor="let grafico of ArrayGraficos" class="col-6">
+    <div class="card">
+      <div class="card-body">
+
+        <app-grafico-dona
+              [leyenda] = "grafico.leyenda"
+              [labels] = "grafico.labels"
+              [data] = "grafico.data"
+              [type] = "grafico.type" >
+        </app-grafico-dona>
+
+      </div>
+    </div>
+  </div>
+</div>
