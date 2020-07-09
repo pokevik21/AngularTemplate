@@ -11,6 +11,7 @@ import { Grafica1Component } from './grafica1/grafica1.component';
 import { SharedModule } from '../shared/shared.module';
 import { CompentsModule } from '../components/compents.module';
 import { CommonModule } from '@angular/common';
+import { AccountSettingsComponent } from './account-settings/account-settings.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { CommonModule } from '@angular/common';
     PagesComponent,
     DashboardComponent,
     ProgressComponent,
-    Grafica1Component
+    Grafica1Component,
+    AccountSettingsComponent
   ],
   exports: [
     PagesComponent,
@@ -31,7 +33,8 @@ import { CommonModule } from '@angular/common';
     PagesRoutingModule,
     FormsModule,
     CompentsModule,
-    CommonModule
+    CommonModule,
+    FormsModule
   ]
 
 
