@@ -11,6 +11,7 @@ export class IncrementadorComponent implements OnInit {
    // tslint:disable-next-line:no-input-rename
    @Input( 'nombre' ) leyenda: string = 'Leyenda';
    @Input() progreso: number = 0;
+   @Input() classInput = 'btn-primary';
 
    @Output() cambioValor = new EventEmitter<any>();
 
@@ -21,7 +22,10 @@ export class IncrementadorComponent implements OnInit {
     // console.log( 'progreso', this.progreso );
   }
 
-  ngOnInit(): void{ }
+  ngOnInit(): void{
+    this.classInput = `btn ${this.classInput}`;
+
+  }
 
   onChange( newValue: number ) {
 

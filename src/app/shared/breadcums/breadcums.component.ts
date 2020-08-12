@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ChildActivationEnd, ActivatedRouteSnapshot, ActivationEnd } from '@angular/router';
-import { filter, map } from 'rxjs/Operators';
+import { filter, map } from 'rxjs/operators';
 import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-breadcums',
@@ -9,14 +10,19 @@ import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
   styles: [
   ]
 })
-export class BreadcumsComponent implements OnInit {
+export class BreadcumsComponent implements OnInit, OnDestroy {
 
   titulo: string;
+  tituloSub$: Subscription;
 
   constructor( private router: Router,
                private title: Title,
                private meta: Meta) {
-    this.getDataRoute();
+    this.tituloSub$ = this.getDataRoute();
+  }
+
+  ngOnDestroy(): void {
+    this.tituloSub$.unsubscribe();
   }
 
   ngOnInit(): void {

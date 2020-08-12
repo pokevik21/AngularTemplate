@@ -8,19 +8,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { PagesModele } from './pages/pages.module';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './login/register.component';
+import { AuthModule } from './auth/auth.module';
+
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LoginComponent,
-    RegisterComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     PagesModele,
+    AuthModule,
     AppRoutingModule
   ],
   providers: [],
