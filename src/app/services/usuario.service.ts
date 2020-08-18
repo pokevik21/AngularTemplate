@@ -6,11 +6,12 @@ import { environment } from 'src/environments/environment';
 import { tap, map, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { ThrowStmt } from '@angular/compiler';
-import { resolve } from 'dns';
+import { Usuario } from '../models/usuario.model';
 declare const gapi: any;
 
+
 const base_url = environment.base_url;
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ const base_url = environment.base_url;
 export class UsuarioService {
 
   public auth2: any;
+  public usuario: Usuario;
 
   constructor( private http: HttpClient,
                private router: Router,
@@ -27,19 +29,34 @@ export class UsuarioService {
 
   }
 
+  get token(): string{
+    return localStorage.getItem('token') || '';
+  }
+
+  get uid(): string{
+    return this.usuario.uid || '';
+  }
+
   validarToken(): Observable<boolean>{
-    const token = localStorage.getItem('token') || '';
 
     return this.http.get( `${base_url}/login/renew`, {
       headers: {
-        'x-token': token
+        'x-token': this.token
       }
     }).pipe(
-      tap( (resp: any) => {
+      map( (resp: any) => {
+
+        const { email, google, img, nombre, role, uid } = resp.usuario;
+
+        this.usuario = new Usuario( nombre, email, '', img, google, role, uid );
         localStorage.setItem('token', resp.token);
+
+        return true;
       } ),
-      map( resp => true),
-      catchError( err => of(false))
+      catchError( err => {
+        console.log(err);
+        return of(false);
+      })
     );
 
   }
@@ -69,6 +86,20 @@ export class UsuarioService {
                 } )
               );
 
+  }
+
+  actualizarUsuario( fromData: { email: string, nombre: string, role: string } ){
+
+    fromData = {
+      ...fromData,
+      role: this.usuario.role
+    };
+
+    return this.http.put( `${base_url}/usuarios/${this.uid}`, fromData, {
+      headers: {
+        'x-token': this.token
+      }
+    } );
   }
 
 
@@ -105,5 +136,8 @@ export class UsuarioService {
 
 
   }
+
+
+  
 
 }
