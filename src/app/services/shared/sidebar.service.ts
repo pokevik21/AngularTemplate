@@ -22,8 +22,8 @@ export class SidebarService {
       icon: 'mdi mdi-folder-lock-open',
       submenus: [
         { titulo: 'Usuarios', url: '/dashboard/usuarios' },
-        { titulo: 'Hospitales', url: '/dashboard/progress' },
-        { titulo: 'Médicos', url: '/dashboard/grafica1' }
+        { titulo: 'Hospitales', url: '/dashboard/hospitales' },
+        { titulo: 'Médicos', url: '/dashboard/medicos' }
       ]
     }
   ];

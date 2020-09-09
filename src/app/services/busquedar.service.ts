@@ -4,6 +4,8 @@ import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { Usuario } from '../models/usuario.model';
 import Swal from 'sweetalert2';
+import { Hospital } from '../models/hospital.model';
+import { Medico } from '../models/medico.model';
 const base_url = environment.base_url;
 
 @Injectable({
@@ -29,11 +31,23 @@ export class BusquedarService {
   }
 
   private transformarUsuarios( resultados: any[] ): Usuario[]{
-
     return resultados.map(
       user => new Usuario( user.nombre, user.email, '', user.img, user.google, user.role, user.uid )
     );
   }
+
+  private transformarHospitales( resultados: any[] ): Hospital[]{
+    return resultados.map(
+      hosp => new Hospital( hosp.nombre, hosp._id, hosp.img, hosp.usuario._id )
+    );
+  }
+
+  private transformarMedicos( resultados: any[] ): Medico[]{
+    return resultados.map(
+      medico => medico
+    );
+  }
+
 
   buscar( tipo: 'usuarios' | 'medicos' | 'hospitales',
           termino: string
@@ -47,16 +61,11 @@ export class BusquedarService {
                   map( (resp: any ) => {
                     switch (tipo) {
                       case 'usuarios':
-                         return this.transformarUsuarios(resp.resultados);
+                        return this.transformarUsuarios(resp.resultados);
                       case 'medicos':
-
-                         break;
-
+                        return this.transformarMedicos(resp.resultados);
                       case 'hospitales':
-
-                        break;
-
-
+                        return this.transformarHospitales(resp.resultados);
                       default:
                         return [];
                     }
@@ -64,7 +73,7 @@ export class BusquedarService {
                 );
   }
 
-  
+
 
 
 }
