@@ -39,12 +39,21 @@ export class UsuarioService {
     return this.usuario.uid || '';
   }
 
+  get role(): 'ADMIN_ROLE' | 'USER_ROLE' {
+    return this.usuario.role;
+  }
+
   get headers() {
     return {
       headers: {
         'x-token': this.token
       }
     };
+  }
+
+  guardarLocalStorage( token: string, menu: any ){
+    localStorage.setItem('token', token);
+    localStorage.setItem('menu', JSON.stringify(menu));
   }
 
   validarToken(): Observable<boolean>{
@@ -59,7 +68,7 @@ export class UsuarioService {
         const { email, google, img, nombre, role, uid } = resp.usuario;
 
         this.usuario = new Usuario( nombre, email, '', img, google, role, uid );
-        localStorage.setItem('token', resp.token);
+        this.guardarLocalStorage( resp.token, resp.menu );
 
         return true;
       } ),
@@ -92,7 +101,7 @@ export class UsuarioService {
      return this.http.post( `${base_url}/usuarios`, fromData )
                 .pipe(
                 tap( (resp: any) => {
-                  localStorage.setItem('token', resp.token);
+                  this.guardarLocalStorage( resp.token, resp.menu );
                 } )
               );
 
@@ -118,7 +127,7 @@ export class UsuarioService {
     return this.http.post( `${base_url}/login`, fromData )
                 .pipe(
                   tap( (resp: any) => {
-                    localStorage.setItem('token', resp.token);
+                    this.guardarLocalStorage( resp.token, resp.menu );
                   } ),
                 );
 
@@ -129,7 +138,7 @@ export class UsuarioService {
   return this.http.post( `${base_url}/login/google`, { token } )
               .pipe(
                 tap( (resp: any) => {
-                  localStorage.setItem('token', resp.token);
+                  this.guardarLocalStorage( resp.token, resp.menu );
                 } )
               );
 
@@ -137,6 +146,7 @@ export class UsuarioService {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('menu');
 
     this.auth2.signOut().then( () => {
       this.ngZone.run( () => {
